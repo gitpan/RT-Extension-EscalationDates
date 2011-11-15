@@ -1,0 +1,78 @@
+<%INIT>
+
+use Date::Manip;
+
+use strict;
+
+##
+## Configuration
+##
+
+## MySQL date time format:
+my $format = '%Y-%m-%d %T';
+
+## Destinated default time to start is (simply) now:
+my $now  = 'now';
+
+##
+## Logic
+##
+
+## Client data
+my $ARGSRef = $ARGS{'ARGSRef'};
+
+## Fetch priority:
+my $priorityField = RT->Config->Get('PriorityField');
+## @todo Doesn't work properly...
+if (!$$ARGSRef{$priorityField} || $$ARGSRef{$priorityField} =~ /^[ \t]*$/) {
+    # Set default priority:
+    $$ARGSRef{$priorityField} = RT->Config->Get('DefaultPriority');
+}
+
+## Call only after POSTing formular:
+if (!exists $$ARGSRef{'AddMoreAttach'} && defined($$ARGSRef{'id'}) &&
+    $$ARGSRef{'id'} eq 'new') {
+    ## Create new date:
+    my $date = new Date::Manip::Date;
+
+    ## Set start date:
+    if (!$$ARGSRef{'Starts'} || $$ARGSRef{'Starts'} =~ /^[ \t]*$/) {
+        $date->parse($now);
+        my $start = $date->printf($format);
+
+        $$ARGSRef{'Starts'} = $start;
+    }
+
+    ## Set due date:
+    if (!$$ARGSRef{'Due'} || $$ARGSRef{'Due'} =~ /^[ \t]*$/) {
+        my $priority = $$ARGSRef{$priorityField};
+
+        ## Fetch when ticket should be escalated by priority:
+        my %priorities = RT->Config->Get('EscalateTicketsByPriority');
+        if (!exists $priorities{$priority}) {
+            $$skip_create = 1;
+            push @{$results}, loc('Error: unconfigured priority');
+        }
+        my $deltaStr = $priorities{$priority};
+
+        ## Configure Date::Manip:
+        my %dateConfig = RT->Config->Get('DateManipConfig');
+        $date->config(%dateConfig);
+
+        ## Compute date delta and format result:
+        my $delta = $date->new_delta();
+        my $startDate = $$ARGSRef{'Starts'};
+        $date->parse($startDate);
+        $delta->parse($deltaStr);
+        my $calc = $date->calc($delta);
+        my $due = $calc->printf($format);
+
+        $$ARGSRef{'Due'} = $due;
+    }
+}
+
+</%INIT>
+<%ARGS>
+$skip_create => undef
+$results => undef
+</%ARGS>

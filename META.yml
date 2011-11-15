@@ -1,0 +1,29 @@
+--- #YAML:1.0
+abstract: 'Set start and due time automatically when creating a ticket'
+author:
+  - 'Benjamin Heisig <bheisig@synetics.de>'
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+requires:
+  Date::Manip: 6.25
+distribution_type: module
+generated_by: 'Module::Install version 1.00'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: RT-Extension-EscalationDates
+no_index:
+  file
+    - README.md
+  directory:
+    - html
+    - inc
+    - t
+resources:
+  license: http://dev.perl.org/licenses/
+  repository: git://git.benjaminheisig.net/rt-extension-escalationdates.git
+version: 0.1
+
