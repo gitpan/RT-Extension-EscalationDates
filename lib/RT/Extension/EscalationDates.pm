@@ -4,7 +4,7 @@ use 5.010;
 use warnings;
 use strict;
 
-our $VERSION = '0.2';
+our $VERSION = '0.3';
 
 
 =head1 NAME
@@ -44,13 +44,10 @@ Note: Please read the following section before initiating the database.
 =head2 RT SITE CONFIGURATION
 
 To enable this extension edit the RT site configuration located in
-C<$RT_HOME/etc/RT_SiteConfig> (where C<$RT_HOME> is the path to your RT
+C<$RT_HOME/etc/RT_SiteConfig.pm> (where C<$RT_HOME> is the path to your RT
 installation):
 
-    Set(@Plugins,qw(
-        RT::Extension::EscalationDates
-        RT::Action::EscalationDates
-    ));
+    Set(@Plugins,qw(RT::Extension::EscalationDates));
 
 Note: If you use C<make initdb> during L<installation|/"INSTALLATION"> you'll
 create a custom field with the name 'Priority' so it's unnecessary to

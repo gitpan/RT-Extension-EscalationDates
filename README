@@ -26,13 +26,10 @@ INSTALLATION
 CONFIGURATION
   RT SITE CONFIGURATION
     To enable this extension edit the RT site configuration located in
-    "$RT_HOME/etc/RT_SiteConfig" (where $RT_HOME is the path to your RT
+    "$RT_HOME/etc/RT_SiteConfig.pm" (where $RT_HOME is the path to your RT
     installation):
 
-        Set(@Plugins,qw(
-            RT::Extension::EscalationDates
-            RT::Action::EscalationDates
-        ));
+        Set(@Plugins,qw(RT::Extension::EscalationDates));
 
     Note: If you use "make initdb" during installation you'll create a
     custom field with the name 'Priority' so it's unnecessary to create one

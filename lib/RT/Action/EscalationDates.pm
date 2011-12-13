@@ -5,9 +5,9 @@ use strict;
 use warnings;
 
 use base qw(RT::Action);
-use Date::Manip;
+use Date::Manip::Date;
 
-our $VERSION = '0.2';
+our $VERSION = '0.3';
 
 
 =head1 NAME
@@ -213,25 +213,34 @@ sub Commit {
     ## Destinated default time to start is (simply) now:
     my $now  = 'now';
 
+    ## UNIX timestamp 0:
+    my $notSet = '1970-01-01 00:00:00';
+
+    my $RTTimezone = 'UTC';
+
     ## Look at start date:
-    if (!$starts || $starts eq '1970-01-01 00:00:00') {
+    if ($starts eq $notSet) {
         $date->parse($now);
         $starts = $date->printf($format);
 
-        $RT::Logger->notice('Set start date: ' . $starts);
+        ## Convert to UTC time:
+        $date->convert($RTTimezone);
+        my $startsUTC = $date->printf($format);
+
+        $RT::Logger->notice('Set start date: ' . $starts . ' (UTC: ' . $startsUTC . ')');
 
         ## Set start date:
-        my ($val, $msg) = $ticket->SetStarts($starts);
+        my ($val, $msg) = $ticket->SetStarts($startsUTC);
         unless ($val) {
             $RT::Logger->error('Could not set start date: ' . $msg);
             return 0;
         }
+    } else {
+        $RT::Logger->info('Start date: ' . $starts);
     }
 
-    $RT::Logger->info('Start date: ' . $starts);
-
     ## Look at due date:
-    if (!$due || $due eq '1970-01-01 00:00:00') {
+    if ($due eq $notSet) {
         ## Fetch when ticket should be escalated by priority:
         my %priorities = RT->Config->Get('EscalateTicketsByPriority');
 
@@ -254,17 +263,21 @@ sub Commit {
         my $calc = $date->calc($delta);
         $due = $calc->printf($format);
 
-        $RT::Logger->notice('Set due date: ' . $due);
+        ## Convert to UTC time:
+        $calc->convert($RTTimezone);
+        my $dueUTC = $calc->printf($format);
+
+        $RT::Logger->notice('Set due date: ' . $due . ' (UTC: ' . $dueUTC . ')');
 
         ## Set due date:
-        my ($val, $msg) = $ticket->SetDue($due);
+        my ($val, $msg) = $ticket->SetDue($dueUTC);
         unless ($val) {
             $RT::Logger->error('Could not set due date: ' . $msg);
             return 0;
         }
+    } else {
+      $RT::Logger->info('Due date: ' . $due);
     }
-
-    $RT::Logger->info('Due date: ' . $due);
 
     return 1;
 }

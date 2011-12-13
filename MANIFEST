@@ -20,6 +20,7 @@ lib/RT/Extension/EscalationDates.pm
 Makefile.PL
 MANIFEST
 META.yml
+po/de.po
 README
 SIGNATURE
 t/00-load.t

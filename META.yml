@@ -21,6 +21,7 @@ no_index:
     - etc
     - html
     - inc
+    - po
     - t
 resources:
   license: http://dev.perl.org/licenses/
@@ -28,6 +29,6 @@ resources:
 provides:
   RT::Action::EscalationDates:
     file: lib/RT/Action/EscalationDates.pm
-    version: 0.2
-version: 0.2
+    version: 0.3
+version: 0.3
 
