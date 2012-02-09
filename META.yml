@@ -1,21 +1,29 @@
 --- #YAML:1.0
-abstract: 'Set start and due time automatically when creating a ticket'
-author:
-  - 'Benjamin Heisig <bheisig@synetics.de>'
-build_requires:
-  ExtUtils::MakeMaker: 6.42
-configure_requires:
-  ExtUtils::MakeMaker: 6.42
-requires:
-  Date::Manip: 6.25
-  rt: 4.0.0
-  perl: 5.10.0
-distribution_type: module
-license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: RT-Extension-EscalationDates
+version: 0.4
+abstract: 'Set start and due time automatically when creating a ticket'
+author:
+  - Benjamin Heisig <bheisig@synetics.de>
+license: perl
+distribution_type: module
+requires:
+  Date::Manip: 6.25
+  rt: 4.0.0
+  perl: 5.10.0
+build_requires:
+  ExtUtils::MakeMaker: 6.42
+configure_requires:
+  ExtUtils::MakeMaker: 6.42
+provides:
+  RT::Extension::EscalationDates:
+    file: lib/RT/Extension/EscalationDates.pm
+    version: 0.4
+  RT::Action::EscalationDates:
+    file: lib/RT/Action/EscalationDates.pm
+    version: 0.4
 no_index:
   directory:
     - etc
@@ -23,12 +31,13 @@ no_index:
     - inc
     - po
     - t
+keywords:
+  - RT
+  - Request Tracker
+  - Escalation
+  - SLA
 resources:
   license: http://dev.perl.org/licenses/
   repository: git://git.benjaminheisig.net/rt-extension-escalationdates.git
-provides:
-  RT::Action::EscalationDates:
-    file: lib/RT/Action/EscalationDates.pm
-    version: 0.3
-version: 0.3
-
+  bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=RT-Extension-EscalationDates
+generated_by: Benjamin Heisig <bheisig@synetics.de>
